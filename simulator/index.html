@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0" />
+  <title>Pleos Witness — 현대자동차 플레오스 AI 안전신문고 시뮬레이터</title>
+  <style>
+    :root {
+      --bg-deep: #080d16;
+      --bg-panel: #0f1726;
+      --bg-card: #152033;
+      --border-subtle: rgba(148, 163, 184, 0.2);
+      --cyan: #38bdf8;
+      --cyan-glow: rgba(56, 189, 248, 0.28);
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body {
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: var(--bg-deep);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 1. Top Automotive IVI Status Bar (76px) */
+    .ivi-topbar {
+      height: 76px;
+      background: linear-gradient(180deg, #0c1424 0%, #09101d 100%);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 36px;
+      z-index: 30;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .gear-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #131d31;
+      padding: 8px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .gear-item {
+      font-size: 22px;
+      font-weight: 800;
+      color: #475569;
+      padding: 2px 8px;
+      border-radius: 8px;
+    }
+    .gear-item.active-d {
+      color: #080d16;
+      background: var(--cyan);
+      box-shadow: 0 0 16px var(--cyan-glow);
+    }
+    .gear-item.active-p {
+      color: #080d16;
+      background: var(--emerald);
+      box-shadow: 0 0 16px rgba(16, 185, 129, 0.45);
+    }
+    .speed-badge {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .speed-val {
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+    .speed-unit {
+      font-size: 15px;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-left: 18px;
+      border-left: 1px solid var(--border-subtle);
+    }
+    .brand-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 12px var(--cyan);
+    }
+    .brand-name {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+    }
+    .brand-sub {
+      font-size: 14px;
+      color: var(--cyan);
+      font-weight: 700;
+      background: rgba(56, 189, 248, 0.12);
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    .topbar-center {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .rec-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(239, 68, 68, 0.14);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      color: #fca5a5;
+      padding: 7px 16px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .rec-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--red);
+    }
+    .lock-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 700;
+      background: rgba(245, 158, 11, 0.14);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      color: #fcd34d;
+    }
+    .lock-pill.unlocked {
+      background: rgba(16, 185, 129, 0.16);
+      border-color: rgba(16, 185, 129, 0.5);
+      color: #6ee7b7;
+    }
+
+    /* 2. Main Split Screen Area */
+    .ivi-main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 720px 1fr;
+      gap: 24px;
+      padding: 22px 28px;
+      position: relative;
+    }
+
+    /* Left Pane: Clean Hyundai Pleos 3D Navigation Map */
+    .nav-pane {
+      background: radial-gradient(circle at 50% 35%, #16243d 0%, #0b1322 100%);
+      border-radius: 24px;
+      border: 1px solid var(--border-subtle);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px;
+    }
+    .nav-road-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .nav-tbt-card {
+      position: relative;
+      z-index: 2;
+      background: rgba(15, 23, 38, 0.92);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 18px;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .tbt-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .tbt-arrow {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      font-weight: 900;
+      color: #fff;
+    }
+    .tbt-dist {
+      font-size: 28px;
+      font-weight: 900;
+      color: #fff;
+    }
+    .tbt-road {
+      font-size: 17px;
+      color: var(--text-sub);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .speed-limit-sign {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: #fff;
+      border: 6px solid #ef4444;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 900;
+    }
+    .nav-bottom-bar {
+      position: relative;
+      z-index: 2;
+      background: rgba(15, 23, 38, 0.92);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-sdk-badges {
+      display: flex;
+      gap: 8px;
+    }
+    .sdk-chip {
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #7dd3fc;
+    }
+
+    /* Right Pane: Top 16:9 Built-in Cam 2 Video Frame + Bottom Driving Status / Voice AI Strip */
+    .cam-column {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      height: 100%;
+    }
+    .cam-video-frame {
+      width: 1120px;
+      height: 630px;
+      background: #000;
+      border-radius: 22px;
+      border: 2px solid rgba(56, 189, 248, 0.38);
+      overflow: hidden;
+      position: relative;
+    }
+    .cam-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .cam-status-strip {
+      flex: 1;
+      background: linear-gradient(165deg, #111c30 0%, #0b1322 100%);
+      border-radius: 22px;
+      border: 1px solid var(--border-subtle);
+      padding: 22px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .cam-status-strip.step2-active {
+      border: 2px solid var(--cyan);
+      background: linear-gradient(165deg, #10233f 0%, #0b1526 100%);
+    }
+    .strip-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .strip-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 800;
+      padding: 7px 16px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
+    }
+    .strip-badge.emerald {
+      background: rgba(16, 185, 129, 0.18);
+      border-color: var(--emerald);
+      color: #6ee7b7;
+    }
+    .strip-main-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .strip-title {
+      font-size: 26px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.3;
+    }
+    .strip-sub {
+      font-size: 17px;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .voice-pill-box {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(8, 13, 22, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      padding: 14px 24px;
+      border-radius: 18px;
+      min-width: 390px;
+    }
+    .wave-bars {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      height: 28px;
+    }
+    .wave-bar {
+      width: 5px;
+      background: var(--cyan);
+      border-radius: 999px;
+    }
+    .wave-bar:nth-child(1) { height: 14px; }
+    .wave-bar:nth-child(2) { height: 26px; }
+    .wave-bar:nth-child(3) { height: 18px; }
+    .wave-bar:nth-child(4) { height: 28px; }
+    .wave-bar:nth-child(5) { height: 16px; }
+
+    /* Step 3 & Step 4: Parked (P Gear) Clean One-Touch Verification Modal */
+    .parked-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(6, 10, 18, 0.86);
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .parked-modal-backdrop.visible {
+      display: flex;
+    }
+    .parked-modal {
+      width: 1740px;
+      height: 850px;
+      background: linear-gradient(165deg, #111b2e 0%, #0b1220 100%);
+      border-radius: 32px;
+      border: 2px solid rgba(56, 189, 248, 0.45);
+      box-shadow: 0 28px 80px rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .modal-header {
+      height: 86px;
+      padding: 0 38px;
+      background: rgba(18, 29, 49, 0.9);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-title-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .modal-p-badge {
+      background: var(--emerald);
+      color: #06120e;
+      font-size: 18px;
+      font-weight: 900;
+      padding: 8px 18px;
+      border-radius: 12px;
+    }
+    .modal-title {
+      font-size: 28px;
+      font-weight: 900;
+      color: #fff;
+    }
+    .modal-subtitle {
+      font-size: 17px;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+    .modal-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 980px 1fr;
+      gap: 32px;
+      padding: 30px 38px;
+    }
+    .modal-video-col {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .modal-video-box {
+      width: 980px;
+      height: 552px;
+      background: #000;
+      border-radius: 22px;
+      border: 2px solid rgba(56, 189, 248, 0.35);
+      overflow: hidden;
+      position: relative;
+    }
+    .modal-video-box video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .plate-compare-row {
+      height: 112px;
+      background: rgba(21, 32, 51, 0.9);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .plate-compare-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .plate-compare-item img {
+      height: 68px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .plate-label-sm {
+      font-size: 14px;
+      color: var(--text-sub);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .plate-label-lg {
+      font-size: 20px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    /* Right Column of Modal: 3 Clean Driver Cards + Giant CTA Button */
+    .modal-info-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .info-cards-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .info-card {
+      background: rgba(21, 32, 51, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 20px 24px;
+    }
+    .info-card-label {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .info-card-main {
+      font-size: 25px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.3;
+    }
+    .info-card-sub {
+      font-size: 16px;
+      color: #cbd5e1;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .check-chips {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .check-chip {
+      font-size: 14px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      color: #6ee7b7;
+    }
+
+    .cta-submit-btn {
+      height: 88px;
+      border-radius: 22px;
+      border: 2px solid rgba(110, 231, 183, 0.6);
+      background: linear-gradient(135deg, #0284c7 0%, #2563eb 50%, #10b981 100%);
+      color: #fff;
+      font-size: 26px;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      box-shadow: 0 16px 40px rgba(37, 99, 235, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Step 4: Official MOIS Receipt Overlay Inside Right Column */
+    .receipt-panel {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      background: linear-gradient(165deg, rgba(6, 78, 59, 0.38) 0%, rgba(15, 23, 38, 0.95) 100%);
+      border: 2px solid var(--emerald);
+      border-radius: 24px;
+      padding: 28px;
+    }
+    .receipt-panel.visible {
+      display: flex;
+    }
+    .receipt-badge-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid var(--emerald);
+      color: #6ee7b7;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 800;
+      width: fit-content;
+    }
+    .receipt-big-title {
+      font-size: 32px;
+      font-weight: 900;
+      color: #fff;
+      margin-top: 12px;
+    }
+    .receipt-no {
+      font-size: 22px;
+      font-weight: 800;
+      color: #34d399;
+      margin-top: 4px;
+    }
+    .receipt-table {
+      background: rgba(10, 16, 28, 0.82);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 17px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      padding-bottom: 10px;
+    }
+    .receipt-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .r-key { color: #94a3b8; font-weight: 700; }
+    .r-val { color: #f8fafc; font-weight: 800; }
+    .receipt-done-banner {
+      height: 74px;
+      border-radius: 18px;
+      background: var(--emerald);
+      color: #04130e;
+      font-size: 24px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+  <!-- 1. Top Automotive IVI Status Bar -->
+  <header class="ivi-topbar">
+    <div class="topbar-left">
+      <div class="gear-pill">
+        <span class="gear-item" id="gearP">P</span>
+        <span class="gear-item">R</span>
+        <span class="gear-item">N</span>
+        <span class="gear-item active-d" id="gearD">D</span>
+      </div>
+      <div class="speed-badge">
+        <span class="speed-val" id="speedVal">88</span>
+        <span class="speed-unit">km/h</span>
+      </div>
+      <div class="brand-title">
+        <span class="brand-dot"></span>
+        <span class="brand-name">HYUNDAI PLEOS CONNECT</span>
+        <span class="brand-sub">Pleos Witness AI</span>
+      </div>
+    </div>
+
+    <div class="topbar-center">
+      <span>🛣️ 제2경인고속도로 (서창JC · 인천 방면)</span>
+      <span style="color:#64748b">|</span>
+      <span>🌤️ 21°C · 14:22</span>
+    </div>
+
+    <div class="topbar-right">
+      <div class="rec-pill">
+        <span class="rec-dot"></span>
+        <span>빌트인 캠 2 상시 버퍼링 (전방 FHD)</span>
+      </div>
+      <div class="lock-pill" id="lockPill">
+        <span id="lockText">🔒 주행 안전 잠금 (D단 조작 차단)</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. Main Split Screen (Navigation + 16:9 Built-in Cam 2 Live Stream) -->
+  <main class="ivi-main">
+    <!-- Left: Clean 3D Pleos Navigation View -->
+    <section class="nav-pane">
+      <svg class="nav-road-svg" viewBox="0 0 720 950" fill="none">
+        <defs>
+          <linearGradient id="roadGrad" x1="360" y1="180" x2="360" y2="950" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#1e293b" stop-opacity="0.2" />
+            <stop offset="100%" stop-color="#334155" stop-opacity="0.75" />
+          </linearGradient>
+          <linearGradient id="routeGlow" x1="360" y1="220" x2="360" y2="950" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.2" />
+            <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.95" />
+          </linearGradient>
+        </defs>
+        <polygon points="290,220 430,220 675,950 45,950" fill="url(#roadGrad)" />
+        <line x1="290" y1="220" x2="45" y2="950" stroke="#475569" stroke-width="3" />
+        <line x1="430" y1="220" x2="675" y2="950" stroke="#475569" stroke-width="3" />
+        <line x1="360" y1="220" x2="360" y2="950" stroke="#64748b" stroke-width="2" stroke-dasharray="18 18" />
+        <path d="M325 900 L345 300" stroke="url(#routeGlow)" stroke-width="18" stroke-linecap="round" />
+        <circle cx="328" cy="790" r="28" fill="rgba(56,189,248,0.22)" />
+        <polygon points="328,766 346,804 328,795 310,804" fill="#38bdf8" stroke="#fff" stroke-width="2" />
+      </svg>
+
+      <div class="nav-tbt-card">
+        <div class="tbt-left">
+          <div class="tbt-arrow">↑</div>
+          <div>
+            <div class="tbt-dist">1.8 km 앞 서창분기점</div>
+            <div class="tbt-road">인천대교 · 송도국제도시 방면 우측 차로 진입</div>
+          </div>
+        </div>
+        <div class="speed-limit-sign">100</div>
+      </div>
+
+      <div class="nav-bottom-bar">
+        <div>
+          <div style="font-size:14px;color:#94a3b8;font-weight:700;">PLEOS CONNECT 5대 SDK 실시간 연동</div>
+          <div style="font-size:17px;color:#f8fafc;font-weight:800;margin-top:3px;">
+            GPS (37.4368, 126.7352) · CAN 기어/속도 · 음성 대기 중
+          </div>
+        </div>
+        <div class="nav-sdk-badges">
+          <span class="sdk-chip">Vehicle</span>
+          <span class="sdk-chip">Location</span>
+          <span class="sdk-chip">Voice AI</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right: Dedicated 16:9 Built-in Cam 2 Frame + Clean Driving Status / Voice Strip -->
+    <section class="cam-column">
+      <div class="cam-video-frame" id="drivingVideoBox">
+        <video id="drivingVideo" class="cam-video" src="/assets/dashcam_raw.mp4" autoplay muted loop playsinline></video>
+      </div>
+
+      <div class="cam-status-strip" id="camStatusStrip">
+        <div class="strip-top-row">
+          <span class="strip-badge" id="stripBadge">● 현대자동차 빌트인 캠 2 — 실시간 주행 모니터링</span>
+          <span style="font-size:15px;color:#94a3b8;font-weight:700;" id="stripRightMeta">주행 중(D) 화면 조작 차단 · 음성 호출만 허용</span>
+        </div>
+
+        <div class="strip-main-row">
+          <div>
+            <div class="strip-title" id="stripMainTitle">운전 중 핸즈프리 음성 한마디로 즉시 북마크</div>
+            <div class="strip-sub" id="stripMainSub">깜빡이 없이 끼어드는 위험 차량 발견 시 “플레오스, 방금 차 신고해 줘”라고 말씀하세요</div>
+          </div>
+
+          <div class="voice-pill-box">
+            <div class="wave-bars">
+              <div class="wave-bar"></div>
+              <div class="wave-bar"></div>
+              <div class="wave-bar"></div>
+              <div class="wave-bar"></div>
+              <div class="wave-bar"></div>
+            </div>
+            <div>
+              <div style="font-size:13px;color:#38bdf8;font-weight:800;" id="voicePillLabel">PLEOS GLEO VOICE AI</div>
+              <div style="font-size:20px;color:#fff;font-weight:900;margin-top:2px;" id="voicePillQuote">“플레오스, 방금 차 신고해 줘”</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 3 & Step 4: Parked (Gear == P) One-Touch Verification Modal -->
+    <div class="parked-modal-backdrop" id="parkedModal">
+      <div class="parked-modal">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="modal-p-badge">P 주차 완료 · 안전 잠금 해제</span>
+            <span class="modal-title">Pleos Witness AI 공익신고 원터치 확인</span>
+          </div>
+          <span class="modal-subtitle">주행 중 음성 북마크된 위반 패키지 1건 · 확인 후 버튼 한 번으로 접수됩니다</span>
+        </div>
+
+        <div class="modal-body">
+          <!-- Left of Modal: Real Vision AI Analyzed Video (Exact 16:9 980x552) + Plate Compare -->
+          <div class="modal-video-col">
+            <div class="modal-video-box" id="modalVideoBox">
+              <video id="modalAiVideo" src="/assets/dashcam_ai_analyzed.mp4" autoplay muted loop playsinline></video>
+            </div>
+            <div class="plate-compare-row">
+              <div class="plate-compare-item">
+                <img src="/assets/plate_crop_before.png" alt="Before" />
+                <div>
+                  <div class="plate-label-sm">단일 프레임 원본 크롭</div>
+                  <div class="plate-label-lg" style="color:#94a3b8;">모션 블러 (식별 불가)</div>
+                </div>
+              </div>
+              <div style="font-size:28px;color:#38bdf8;font-weight:900;">➔</div>
+              <div class="plate-compare-item">
+                <img src="/assets/plate_crop_after.png" alt="After" />
+                <div>
+                  <div class="plate-label-sm" style="color:#38bdf8;">온디바이스 AI 15프레임 초해상도 정합</div>
+                  <div class="plate-label-lg" style="color:#34d399;">123가 4568 (복원율 99.4%)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right of Modal: Step 3 Summary Cards OR Step 4 Official MOIS Receipt -->
+          <div class="modal-info-col" id="step3InfoCol">
+            <div class="info-cards-stack">
+              <div class="info-card">
+                <div class="info-card-label">
+                  <span>① AI 복원 피신고 차량 번호</span>
+                  <span style="color:#34d399;">신뢰도 99.4% (검증 완료)</span>
+                </div>
+                <div class="info-card-main" style="font-size:32px;letter-spacing:1px;">123가 4568 <span style="font-size:18px;color:#94a3b8;font-weight:700;">(백색 세단 · BMW)</span></div>
+              </div>
+
+              <div class="info-card">
+                <div class="info-card-label">
+                  <span>② 비전 AI 자동 분류 위반 법규</span>
+                  <span style="color:#f87171;">도로교통법 제38조 제1항</span>
+                </div>
+                <div class="info-card-main">진로변경 방법 위반 (방향지시등 미점등 끼어들기)</div>
+                <div class="info-card-sub">차선 진입 전후 2.0초간 좌측 방향지시등 점멸 주파수 0.0Hz 감지</div>
+              </div>
+
+              <div class="info-card">
+                <div class="info-card-label">
+                  <span>③ 위반 일시 · 위치 · 개인정보 보호</span>
+                  <span>Pleos NaviHelper 연동</span>
+                </div>
+                <div class="info-card-main" style="font-size:20px;">인천 남동구 제2경인고속도로 서창분기점 부근</div>
+                <div class="info-card-sub">2026-11-02 14:22:18 · GPS (37.4368, 126.7352)</div>
+                <div class="check-chips">
+                  <span class="check-chip">✓ 제3자 차량 실시간 모자이크 완료</span>
+                  <span class="check-chip">✓ SHA-256 원본 해시 서명</span>
+                </div>
+              </div>
+            </div>
+
+            <button class="cta-submit-btn" id="submitBtn">
+              <span>행정안전부 안전신문고 원터치 신고 제출</span>
+            </button>
+          </div>
+
+          <!-- Step 4 Receipt View -->
+          <div class="receipt-panel" id="step4ReceiptCol">
+            <div>
+              <div class="receipt-badge-top">● 행정안전부 안전신문고 Open API 실시간 전송 완료</div>
+              <div class="receipt-big-title">공익신고 원터치 접수 완료!</div>
+              <div class="receipt-no" id="receiptNoText">접수번호 제2026-MOIS-0891422호</div>
+            </div>
+
+            <div class="receipt-table">
+              <div class="receipt-row">
+                <span class="r-key">피신고 차량번호</span>
+                <span class="r-val">123가 4568 (AI 초해상도 복원 99.4%)</span>
+              </div>
+              <div class="receipt-row">
+                <span class="r-key">위반 법규 항목</span>
+                <span class="r-val" style="color:#fca5a5;">도로교통법 제38조 제1항 (진로변경 신호불이행)</span>
+              </div>
+              <div class="receipt-row">
+                <span class="r-key">관할 배정 기관</span>
+                <span class="r-val" id="receiptAgencyText">인천논현경찰서 교통과 (공익신고 전담팀)</span>
+              </div>
+              <div class="receipt-row">
+                <span class="r-key">제3자 비식별화</span>
+                <span class="r-val" style="color:#6ee7b7;">주변 무관 차량 번호판 100% 가우시안 블러 완료</span>
+              </div>
+              <div class="receipt-row">
+                <span class="r-key">원본 무결성 해시</span>
+                <span class="r-val" style="font-family:monospace;font-size:15px;" id="receiptHashText">SHA-256: b27ae37d6610909c... (검증됨)</span>
+              </div>
+            </div>
+
+            <div class="receipt-done-banner">
+              <span>✓ 단 10초 만에 안전신문고 공익신고 접수가 완료되었습니다</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const gearP = document.getElementById('gearP');
+    const gearD = document.getElementById('gearD');
+    const speedVal = document.getElementById('speedVal');
+    const lockPill = document.getElementById('lockPill');
+    const lockText = document.getElementById('lockText');
+    const parkedModal = document.getElementById('parkedModal');
+    const step3InfoCol = document.getElementById('step3InfoCol');
+    const step4ReceiptCol = document.getElementById('step4ReceiptCol');
+    const camStatusStrip = document.getElementById('camStatusStrip');
+    const stripBadge = document.getElementById('stripBadge');
+    const stripRightMeta = document.getElementById('stripRightMeta');
+    const stripMainTitle = document.getElementById('stripMainTitle');
+    const stripMainSub = document.getElementById('stripMainSub');
+
+    async function setStep(step) {
+      if (step === 1) {
+        gearD.className = 'gear-item active-d';
+        gearP.className = 'gear-item';
+        speedVal.textContent = '88';
+        lockPill.className = 'lock-pill';
+        lockText.textContent = '🔒 주행 안전 잠금 (D단 조작 차단)';
+        camStatusStrip.className = 'cam-status-strip';
+        stripBadge.className = 'strip-badge';
+        stripBadge.textContent = '● 현대자동차 빌트인 캠 2 — 실시간 주행 모니터링';
+        stripRightMeta.textContent = '주행 중(D) 화면 조작 차단 · 음성 호출만 허용';
+        stripMainTitle.textContent = '운전 중 핸즈프리 음성 한마디로 즉시 북마크';
+        stripMainSub.textContent = '깜빡이 없이 끼어드는 위험 차량 발견 시 “플레오스, 방금 차 신고해 줘”라고 말씀하세요';
+        parkedModal.classList.remove('visible');
+      } else if (step === 2) {
+        await fetch('/api/v1/pleos/voice-bookmark', { method: 'POST' }).catch(() => {});
+        gearD.className = 'gear-item active-d';
+        gearP.className = 'gear-item';
+        speedVal.textContent = '86';
+        camStatusStrip.className = 'cam-status-strip step2-active';
+        stripBadge.className = 'strip-badge emerald';
+        stripBadge.textContent = '✓ 음성 1초 북마크 완료 · 온디바이스 비전 AI 실시간 분석 중';
+        stripRightMeta.textContent = '🔒 주행 안전 잠금 유지 · 정차(P) 시 확인 창 자동 팝업';
+        stripMainTitle.textContent = '전후 30초 영상 · 123가 4568 (방향지시등 0.0Hz 미점등) 자동 패키징';
+        stripMainSub.textContent = '운전자는 전방 주행에만 집중하세요 — 정차 후 원터치 확인 창이 열립니다';
+        parkedModal.classList.remove('visible');
+      } else if (step === 3) {
+        await fetch('/api/v1/pleos/gear/P', { method: 'POST' }).catch(() => {});
+        gearD.className = 'gear-item';
+        gearP.className = 'gear-item active-p';
+        speedVal.textContent = '0';
+        lockPill.className = 'lock-pill unlocked';
+        lockText.textContent = '🔓 P단 정차 확인 · 안전 잠금 해제됨';
+        step3InfoCol.style.display = 'flex';
+        step4ReceiptCol.classList.remove('visible');
+        parkedModal.classList.add('visible');
+      } else if (step === 4) {
+        gearD.className = 'gear-item';
+        gearP.className = 'gear-item active-p';
+        speedVal.textContent = '0';
+        lockPill.className = 'lock-pill unlocked';
+        lockText.textContent = '🔓 안전신문고 Open API 접수 완료';
+        parkedModal.classList.add('visible');
+        try {
+          const res = await fetch('/api/v1/mois/safety-report', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              plate_number: '123가 4568',
+              violation_code: 'KR_RTA_ART38_1'
+            })
+          });
+          const data = await res.json();
+          document.getElementById('receiptNoText').textContent = `접수번호 ${data.receipt_id}`;
+          document.getElementById('receiptAgencyText').textContent = data.assigned_agency;
+          document.getElementById('receiptHashText').textContent = `SHA-256: ${data.sha256_hash.slice(0, 18)}... (무결성 검증됨)`;
+        } catch (e) {}
+        step3InfoCol.style.display = 'none';
+        step4ReceiptCol.classList.add('visible');
+      }
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    let currentStep = Number(params.get('step') || '1');
+    let autoTimer = null;
+
+    // 화면 요소 직접 클릭 연동 + 하단 컨트롤 바 추가
+    gearP.style.cursor = 'pointer';
+    gearD.style.cursor = 'pointer';
+    lockPill.style.cursor = 'pointer';
+    document.querySelector('.voice-pill-box').style.cursor = 'pointer';
+
+    gearP.addEventListener('click', () => setStep(3));
+    gearD.addEventListener('click', () => setStep(1));
+    lockPill.addEventListener('click', () => setStep(currentStep < 3 ? 3 : 1));
+    document.querySelector('.voice-pill-box').addEventListener('click', () => setStep(2));
+    document.getElementById('submitBtn').addEventListener('click', () => setStep(4));
+
+    if (!params.get('step')) {
+      const bar = document.createElement('div');
+      bar.style.cssText = 'position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;gap:8px;background:rgba(10,16,28,0.94);border:1px solid rgba(56,189,248,0.5);padding:8px 14px;border-radius:999px;box-shadow:0 12px 32px rgba(0,0,0,0.75);backdrop-filter:blur(10px);align-items:center;';
+      bar.innerHTML = `
+        <button data-s="1" style="padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);background:#1e293b;color:#fff;font-weight:800;font-size:13px;cursor:pointer;">① 주행 감시 (D)</button>
+        <button data-s="2" style="padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);background:#1e293b;color:#fff;font-weight:800;font-size:13px;cursor:pointer;">② 음성 북마크·AI분석</button>
+        <button data-s="3" style="padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);background:#1e293b;color:#fff;font-weight:800;font-size:13px;cursor:pointer;">③ 정차(P) 팝업 해제</button>
+        <button data-s="4" style="padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);background:#1e293b;color:#fff;font-weight:800;font-size:13px;cursor:pointer;">④ 안전신문고 원터치 접수</button>
+        <button id="autoPlayBtn" style="padding:7px 16px;border-radius:999px;border:none;background:linear-gradient(135deg,#10b981,#0284c7);color:#fff;font-weight:900;font-size:13px;cursor:pointer;">▶ 전체 자동 시연</button>
+      `;
+      document.body.appendChild(bar);
+      bar.querySelectorAll('button[data-s]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+          setStep(Number(btn.dataset.s));
+        });
+      });
+      document.getElementById('autoPlayBtn').addEventListener('click', () => {
+        if (autoTimer) { clearInterval(autoTimer); autoTimer = null; return; }
+        let s = 1;
+        setStep(s);
+        autoTimer = setInterval(() => {
+          s += 1;
+          if (s <= 4) setStep(s);
+          else { clearInterval(autoTimer); autoTimer = null; }
+        }, 4000);
+      });
+    }
+
+    const _origSetStep = setStep;
+    setStep = async function(step) {
+      currentStep = step;
+      document.querySelectorAll('button[data-s]').forEach(b => {
+        const active = Number(b.dataset.s) === step;
+        b.style.background = active ? '#0284c7' : '#1e293b';
+        b.style.borderColor = active ? '#7dd3fc' : 'rgba(255,255,255,0.2)';
+      });
+      return _origSetStep(step);
+    };
+
+    window.addEventListener('keydown', e => {
+      if (['1','2','3','4'].includes(e.key)) setStep(Number(e.key));
+    });
+
+    setStep(currentStep);
+  </script>
+</body>
+</html>

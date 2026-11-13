@@ -1,0 +1,29 @@
+# OS & Editor
+.DS_Store
+*.swp
+*~
+.idea/
+.vscode/
+
+# Android / Gradle build outputs & local SDK path
+android-app/.gradle/
+android-app/build/
+android-app/app/build/
+android-app/local.properties
+*.iml
+
+# Python / Simulator temp files
+__pycache__/
+*.py[cod]
+.venv/
+simulator/_recordings/
+simulator/record_simulator.py
+
+# Video intermediate work files
+videos/work/
+videos/*.sheet.png
+
+# Personal submission form (submitted via email attachment)
+docs/현대자동차그룹_차량용앱공모전_기획서_PleosWitness.docx
+docs/*기획서*.docx
+docs/*기획서*.pdf

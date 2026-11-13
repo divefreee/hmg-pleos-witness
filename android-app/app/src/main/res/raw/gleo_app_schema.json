@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "app_package": "io.pleos.snapreport",
+  "app_name": "Pleos Witness",
+  "description": "차안의 AI 안전신문고 — 빌트인 캠 2와 Pleos Connect SDK, 온디바이스 비전 AI를 결합해 주행 중 음성 한마디로 교통법규 위반 차량을 북마크하고 정차 후 행정안전부 안전신문고 API로 원터치 접수하는 공익신고 앱",
+  "functions": [
+    {
+      "name": "bookmark_traffic_violation",
+      "description": "주행 중 목격한 교통법규 위반(방향지시등 미점등 끼어들기, 신호위반, 지정차로 위반, 적재물 불량 등) 시점의 전후 15초 빌트인 캠 영상과 차량 GPS/도로명/센서 데이터를 즉시 북마크합니다.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "violation_hint": {
+            "type": "string",
+            "enum": [
+              "ILLEGAL_CUT_IN_NO_SIGNAL",
+              "SIGNAL_VIOLATION",
+              "RECKLESS_DRIVING",
+              "UNSECURED_CARGO",
+              "DESIGNATED_LANE_VIOLATION",
+              "AUTO_DETECT"
+            ],
+            "description": "운전자 발화에서 추론된 위반 유형 힌트"
+          },
+          "camera_channel": {
+            "type": "string",
+            "enum": ["FRONT", "REAR", "BOTH"],
+            "default": "FRONT",
+            "description": "우선 분석할 빌트인 캠 채널"
+          }
+        },
+        "required": ["violation_hint"]
+      }
+    },
+    {
+      "name": "submit_pending_safety_report",
+      "description": "차량이 정차(주차 브레이크 체결)된 상태에서 AI가 자동 작성한 안전신문고 공익신고 리포트를 행정안전부 API로 최종 제출합니다.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "report_id": {
+            "type": "string",
+            "description": "제출할 북마크 리포트 ID (생략 시 가장 최근 리포트)"
+          }
+        }
+      }
+    }
+  ]
+}

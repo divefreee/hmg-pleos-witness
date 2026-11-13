@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.pleos.snapreport">
+
+    <!-- Pleos Vehicle SDK 공식 퍼미션 선언 (주행/제동, 차량정보, 방향지시등, 안전경고) -->
+    <uses-permission android:name="pleos.car.permission.CAR_DRIVE" />
+    <uses-permission android:name="pleos.car.permission.CAR_INFO" />
+    <uses-permission android:name="pleos.car.permission.CAR_LIGHTS" />
+    <uses-permission android:name="pleos.car.permission.CAR_SAFETY" />
+
+    <!-- Pleos FusedLocation & NaviHelper 위치 퍼미션 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Pleos SpeechToText (음성 북마크) 및 안전신문고 Open API 통신 퍼미션 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-feature
+        android:name="android.hardware.type.automotive"
+        android:required="true" />
+
+    <application
+        android:allowBackup="false"
+        android:label="Pleos Witness (차안의 AI 안전신문고)"
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
+
+        <!-- Gleo AI Function Calling App Schema 메타데이터 -->
+        <meta-data
+            android:name="ai.pleos.gleo.APP_SCHEMA"
+            android:resource="@raw/gleo_app_schema" />
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

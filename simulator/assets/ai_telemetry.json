@@ -1,0 +1,357 @@
+{
+  "video_raw": "assets/dashcam_raw.mp4",
+  "video_ai": "assets/dashcam_ai_analyzed.mp4",
+  "sha256_hash": "b27ae37d6610909cb9580dbb8e3970cce5431668d15bd2d9e7a212af0bc54746",
+  "plate_number": "123가 4568",
+  "plate_confidence": 99.4,
+  "violation_code": "KR_RTA_ART38_1",
+  "violation_law": "도로교통법 제38조 제1항 (제14조 제5항 경합)",
+  "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+  "occurred_at": "2026-11-02 14:22:18",
+  "location_address": "인천광역시 남동구 제2경인고속도로 서창분기점 부근 (인천 방향)",
+  "gps_lat": 37.4368,
+  "gps_lng": 126.7352,
+  "frames_analyzed": 296,
+  "telemetry_sample": [
+    {
+      "frame": 0,
+      "time_sec": 0.0,
+      "target_bbox": [
+        922,
+        338,
+        1148,
+        455
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.0,
+      "plate_number": "123가 45**",
+      "plate_confidence": 64.0,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 1
+    },
+    {
+      "frame": 15,
+      "time_sec": 0.5,
+      "target_bbox": [
+        953,
+        335,
+        1139,
+        453
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.0,
+      "plate_number": "123가 45**",
+      "plate_confidence": 70.8,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 1
+    },
+    {
+      "frame": 30,
+      "time_sec": 1.0,
+      "target_bbox": [
+        941,
+        334,
+        1120,
+        451
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.0,
+      "plate_number": "123가 45**",
+      "plate_confidence": 77.6,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 1
+    },
+    {
+      "frame": 45,
+      "time_sec": 1.5,
+      "target_bbox": [
+        907,
+        335,
+        1084,
+        450
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.0,
+      "plate_number": "123가 4568",
+      "plate_confidence": 84.4,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 1
+    },
+    {
+      "frame": 60,
+      "time_sec": 2.0,
+      "target_bbox": [
+        859,
+        338,
+        1029,
+        453
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.098,
+      "plate_number": "123가 4568",
+      "plate_confidence": 91.2,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 1
+    },
+    {
+      "frame": 75,
+      "time_sec": 2.5,
+      "target_bbox": [
+        607,
+        358,
+        866,
+        502
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.739,
+      "plate_number": "123가 4568",
+      "plate_confidence": 98.0,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 0
+    },
+    {
+      "frame": 90,
+      "time_sec": 3.0,
+      "target_bbox": [
+        607,
+        357,
+        861,
+        499
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.619,
+      "plate_number": "123가 4568",
+      "plate_confidence": 99.4,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 0
+    },
+    {
+      "frame": 105,
+      "time_sec": 3.5,
+      "target_bbox": [
+        641,
+        341,
+        787,
+        450
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.556,
+      "plate_number": "123가 4568",
+      "plate_confidence": 99.4,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 0
+    },
+    {
+      "frame": 120,
+      "time_sec": 4.0,
+      "target_bbox": [
+        641,
+        341,
+        786,
+        449
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.492,
+      "plate_number": "123가 4568",
+      "plate_confidence": 99.4,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 0
+    },
+    {
+      "frame": 135,
+      "time_sec": 4.5,
+      "target_bbox": [
+        635,
+        342,
+        794,
+        456
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.213,
+      "plate_number": "123가 4568",
+      "plate_confidence": 99.4,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 0
+    },
+    {
+      "frame": 150,
+      "time_sec": 5.0,
+      "target_bbox": [
+        634,
+        343,
+        795,
+        457
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.186,
+      "plate_number": "123가 4568",
+      "plate_confidence": 99.4,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 0
+    },
+    {
+      "frame": 165,
+      "time_sec": 5.5,
+      "target_bbox": [
+        618,
+        356,
+        843,
+        491
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.561,
+      "plate_number": "123가 4568",
+      "plate_confidence": 99.4,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 0
+    },
+    {
+      "frame": 180,
+      "time_sec": 6.0,
+      "target_bbox": [
+        623,
+        357,
+        852,
+        484
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.327,
+      "plate_number": "123가 4568",
+      "plate_confidence": 99.4,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 0
+    },
+    {
+      "frame": 195,
+      "time_sec": 6.5,
+      "target_bbox": [
+        621,
+        358,
+        852,
+        486
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.313,
+      "plate_number": "123가 4568",
+      "plate_confidence": 99.4,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 0
+    },
+    {
+      "frame": 210,
+      "time_sec": 7.0,
+      "target_bbox": [
+        625,
+        354,
+        819,
+        477
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.355,
+      "plate_number": "123가 4568",
+      "plate_confidence": 99.4,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 0
+    },
+    {
+      "frame": 225,
+      "time_sec": 7.5,
+      "target_bbox": [
+        635,
+        342,
+        785,
+        451
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.443,
+      "plate_number": "123가 4568",
+      "plate_confidence": 99.4,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 0
+    },
+    {
+      "frame": 240,
+      "time_sec": 8.0,
+      "target_bbox": [
+        637,
+        341,
+        786,
+        450
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.434,
+      "plate_number": "123가 4568",
+      "plate_confidence": 99.4,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 0
+    },
+    {
+      "frame": 255,
+      "time_sec": 8.5,
+      "target_bbox": [
+        638,
+        338,
+        787,
+        450
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.366,
+      "plate_number": "123가 4568",
+      "plate_confidence": 99.4,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 0
+    },
+    {
+      "frame": 270,
+      "time_sec": 9.0,
+      "target_bbox": [
+        636,
+        337,
+        786,
+        449
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.342,
+      "plate_number": "123가 4568",
+      "plate_confidence": 99.4,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 0
+    },
+    {
+      "frame": 285,
+      "time_sec": 9.5,
+      "target_bbox": [
+        634,
+        336,
+        784,
+        449
+      ],
+      "turn_signal_hz": 0.0,
+      "brake_score": 0.32,
+      "plate_number": "123가 4568",
+      "plate_confidence": 99.4,
+      "violation_code": "KR_RTA_ART38_1",
+      "violation_title": "진로변경 방법 위반 (방향지시등 미점등 끼어들기)",
+      "third_party_masked_count": 0
+    }
+  ]
+}
